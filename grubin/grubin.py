@@ -60,7 +60,7 @@ def find_files():
     Searches through subdirectories for chain files.
     """
     fdir = os.getcwd()
-    folder_names = [x[0] for x in os.walk(fdir)][1:]
+    folder_names = [x[0] for x in os.walk(fdir)]
     for folder in folder_names:
         files = sorted(glob(folder + '/chain*'))
         if not files:
