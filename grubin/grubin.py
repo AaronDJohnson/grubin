@@ -78,6 +78,8 @@ def find_files():
                 if idx.size > 0:
                     done_flag = False
                     print('File', fname, 'has not converged yet.')
+                else:
+                    print('File', fname, 'has converged.')
             if done_flag:
                 print('All files under the Gelman-Rubin statistic threshold.')
             else:
