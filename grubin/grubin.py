@@ -104,7 +104,7 @@ def check_chains(chaindir=None):
                 with open(fname, 'r') as f:
                     try:
                         data = load_chain(fname, numpy=True)
-                    except EmptyDataError:
+                    except:
                         print('File', fname, 'is empty. Continuing...')
                         continue
                 rhat, idx = grubin(data)
