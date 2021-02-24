@@ -1,6 +1,36 @@
 import numpy as np
+import pandas as pd
 import os
 from glob import glob
+
+
+def load_chain(chain_loc, burn=0, thin=1, numpy=False):
+    """
+    Import chains to pandas.
+
+    Input:
+        chaindir (string): folder path of chain to be loaded
+        chain_loc (string): file path of chain to be loaded
+        burn (float) [0]: percent of chain to drop from the beginning
+        thin (float) [1]: take every (#)rd sample -- 2 = every other sample
+        numpy (bool) [False]: return as numpy array?
+
+    Output:
+        chain_df (DataFrame): chain output as pandas dataframe
+    """
+    # import params for headers
+    chaindir = os.path.dirname(chain_loc)
+    param_file = chaindir + '/pars.txt'
+    with open(param_file, 'r') as f:
+        params = [line.rstrip('\n' for line in f)]
+    params += ['lnpost', 'lnlike', 'accept_rate', 'pt_accept']
+
+    # import data
+    chain_raw = pd.read_csv(chain_loc, sep='\t', dtype=float, header=None).values
+    chain_df = pd.DataFrame(data=chain_raw, columns=params)
+    if numpy:
+        chain_df = chain_df.to_numpy()
+    return chain_df
 
 
 def grubin(data, M=4, burn=0.25, threshold=1.1):
@@ -22,7 +52,7 @@ def grubin(data, M=4, burn=0.25, threshold=1.1):
         idx (ndarray): array of indices that are not sampled enough (Rhat > threshold)
     """
     burn = int(burn * data.shape[0])  # cut off burn-in
-    # data_split = np.split(data[burn:,:-2], M)  # cut off last two columns
+
     try:
         data_split = np.split(data[burn:,:-2], M)  # cut off last two columns
     except:
@@ -55,7 +85,7 @@ def grubin(data, M=4, burn=0.25, threshold=1.1):
     return Rhat, idx
 
 
-def find_files():
+def check_chains():
     """
     Searches through subdirectories for chain files.
     """
@@ -68,12 +98,8 @@ def find_files():
         else:
             done_flag = True
             for fname in files:
-                # get temperature from file name
-                # temp = fname.split('/')[-1].split('_')[-1].split('.')[0]
-                # temp = float(temp)
-                # import data
                 with open(fname, 'r') as f:
-                    data = np.loadtxt(f)
+                    data = load_chain(chain_loc, numpy=True)
                 rhat, idx = grubin(data)
                 if idx.size > 0:
                     done_flag = False
