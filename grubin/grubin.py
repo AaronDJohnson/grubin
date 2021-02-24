@@ -106,6 +106,7 @@ def check_chains(chaindir=None):
                         data = load_chain(fname, numpy=True)
                     except EmptyDataError:
                         print('File', fname, 'is empty. Continuing...')
+                        continue
                 rhat, idx = grubin(data)
                 if idx.size > 0:
                     done_flag = False
