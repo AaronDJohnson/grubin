@@ -22,7 +22,7 @@ def load_chain(chain_loc, burn=0, thin=1, numpy=False):
     chaindir = os.path.dirname(chain_loc)
     param_file = chaindir + '/pars.txt'
     with open(param_file, 'r') as f:
-        params = [line.rstrip('\n' for line in f)]
+        params = [line.rstrip('\n') for line in f)]
     params += ['lnpost', 'lnlike', 'accept_rate', 'pt_accept']
 
     # import data
