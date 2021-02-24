@@ -102,7 +102,10 @@ def check_chains(chaindir=None):
             done_flag = True
             for fname in files:
                 with open(fname, 'r') as f:
-                    data = load_chain(fname, numpy=True)
+                    try:
+                        data = load_chain(fname, numpy=True)
+                    except EmptyDataError:
+                        print('File', fname, 'is empty. Continuing...')
                 rhat, idx = grubin(data)
                 if idx.size > 0:
                     done_flag = False
