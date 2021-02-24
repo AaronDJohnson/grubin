@@ -94,7 +94,7 @@ def check_chains(chaindir=None):
     else:
         fdir = chaindir
     folder_names = [x[0] for x in os.walk(fdir)]
-    if not os.listdir(fdir):
+    if not folder_names:
         print('No folders found in given directory. Does the path exist?')
     for folder in folder_names:
         files = sorted(glob(folder + '/chain*'))
