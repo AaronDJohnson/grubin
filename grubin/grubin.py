@@ -102,7 +102,7 @@ def check_chains(chaindir=None):
             done_flag = True
             for fname in files:
                 with open(fname, 'r') as f:
-                    data = load_chain(chain_loc, numpy=True)
+                    data = load_chain(fname, numpy=True)
                 rhat, idx = grubin(data)
                 if idx.size > 0:
                     done_flag = False
