@@ -85,11 +85,14 @@ def grubin(data, M=4, burn=0.25, threshold=1.1):
     return Rhat, idx
 
 
-def check_chains():
+def check_chains(chaindir=None):
     """
     Searches through subdirectories for chain files.
     """
-    fdir = os.getcwd()
+    if not chaindir:
+        fdir = os.getcwd()
+    else:
+        fdir = chaindir
     folder_names = [x[0] for x in os.walk(fdir)]
     for folder in folder_names:
         files = sorted(glob(folder + '/chain*'))
